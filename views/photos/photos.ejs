@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title><%=title%></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" media="screen" href="/stylesheets/style.css" />
+</head>
+<body>
+    <h1><%=title%></h1>
+    <p>Upload a photo to your account below</p>
+    <form method="POST" enctype="multipart/form-data" action="/upload">
+        <p>
+            <input type="text" name="photo[name]" placeholder="Name"/>
+        </p>
+        <p>
+            <input type="file" id="files" name="photo[image]" />
+        </p>
+        <p>
+            <input type="submit" value="Upload"/>
+        </p>
+    </form>
+</body>
+</html>
