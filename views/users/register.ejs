@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta http-equiv="x-ua-compatible" content="ie=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <title><%=title%></title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.2/css/bootstrap.min.css" integrity="sha384-y3tfxAZXuh4HwSYylfB+J125MxIs6mR5FOHamPBG064zB+AFeWH94NdvaCBm8qnd"
+        crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" media="screen" href="/stylesheets/userRegister.css" />
+</head>
+
+<body>
+    <div class="login-container">
+        <div class="card">
+            <header class="login-header">
+                <h2 class="login-title text-uppercase">注册</h2>
+            </header>
+            <div class="login-content">
+                <form id="login-form" action="/register" method="POST" novalidate="" onsubmit="return formSubmit();">
+                    <div class="form-group">
+                        <label for="firstname">姓名</label>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control underlined" name="firstname" id="firstname" placeholder="Enter firstname" required="">                                </div>
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control underlined" name="lastname" id="lastname" placeholder="Enter lastname" required="">                                </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">邮箱</label>
+                        <input type="email" class="form-control underlined" name="email" id="email" placeholder="Enter email address" required="">                        </div>
+                    <div class="form-group">
+                        <label for="password">密码</label>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <input type="password" class="form-control underlined" name="password" id="password" placeholder="Enter password" required="">                                </div>
+                            <div class="col-sm-6">
+                                <input type="password" class="form-control underlined" name="retype_password" id="retype_password" placeholder="Re-type password"
+                                    required=""> </div>
+                        </div>
+                    </div>
+                    <div class="checkbox">
+                        <label for="agree">
+                            <input class="checkbox" name="agree" id="agree" type="checkbox" required="">
+                            <span>是否同意条款和<a href="#">政策</a></span>
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-block btn-success">注册</button>
+                    </div>
+                    <div class="form-group">
+                        <p class="text-muted text-xs-center">已有账号? <a href="/login">登录</a></p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="/javascripts/jquery.min.js"></script>
+    <script>
+        var emailFormat = false;
+        $("#email").blur(function(){
+            var email = $("#email").val();
+            var reg = /^((([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})[; ,])*(([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})))$/;
+            var result = reg.test(email);
+            console.log(result);
+            if(result){
+                $.post("/checkEmail", {
+                    email:$("#email").val()
+                },
+                function(data, textStatus){
+                    if(data == 0){
+                        console.log("can register");
+                        emailFormat = true;
+                    }
+                    else{
+                        console.log("can not register");
+                    }
+                })
+            }
+            else{
+                console.log("can not register by RegEx check");
+            }
+            
+        });
+        
+        function formSubmit(){
+            var checkResult = canRegister();
+            showAlert(checkResult);
+            if(checkResult == 0){
+                $.post('/register', {
+                    agree:$("#agree").val(),
+                    firstname:$("#firstname").val(),
+                    lastname:$("#lastname").val(),
+                    email:$("#email").val(),
+                    password:$("#password").val()
+                }, function(data, textStatus){
+                    if(data == 0){
+                        window.location.href="http://127.0.0.1:4000/";
+                    }
+                    else{
+                        showAlert(data);
+                    }
+                })
+            }
+            else{
+                return false;
+            }
+        }
+
+        function showAlert(code){
+            var tips = "";
+            switch(checkResult){
+                case 1:
+                    tips = '请同意条款和协议';
+                    break;
+                case 2:
+                    tips = '请输入全名';
+                case 3:
+                    tips = '请输入相同密码';
+                    break;
+                case 4:
+                    tips = '密码中必须包含字母、数字、特称字符，至少8个字符，最多30个字符';
+                    break;
+                case 5:
+                    tips = '请输入正确的邮箱账号'
+                    break;
+            }
+            if(tips.length > 0){
+                alert(tips);
+            }
+        }
+
+        function canRegister(){
+            var firstname = $("#firstname").val();
+            var lastname = $("#lastname").val();
+            var password = $("#password").val();
+            var pswRepeat = $("#retype_password").val();
+            var agree = $("#agree").val();
+            if(agree == 'on'){
+                return 1;
+            }
+            if(firstname.lenght < 2)
+            {
+                return 2;
+            }
+            var regExp = new RegExp('(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[^a-zA-Z0-9]).{8,30}');
+            if(!regExp.test(password)){
+                return 4;
+            }
+            if(password != pswRepeat){
+                return 3;
+            }
+            if(!emailFormat){
+                return 5;
+            }
+            return 0;
+        }
+    </script>
+</body>
+
+</html>

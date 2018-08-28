@@ -5,8 +5,11 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var multipart = require('connect-multiparty');
 var multipartMiddleware = multipart();
-// var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var photos = require('./routes/photos1');
+var users = require('./routes/users');
+var mongoose = require('mongoose');
+mongoose.connect("mongodb://192.168.1.66:27017/cherish_shop", { useNewUrlParser: true });//珍购
 
 var app = express();
 
@@ -17,7 +20,7 @@ app.set('view engine', 'ejs');
 app.set('images', __dirname + "/public/images");
 
 // var photos = require("./routes/photos");
-var photos = require('./routes/photos1');
+
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -25,7 +28,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/users', usersRouter);
+// app.use('/users', usersRouter);
 // app.use('/', photos);
 app.get("/hello", function(req, res){
   res.send("hello")
@@ -34,6 +37,9 @@ app.get("/", photos.list);
 app.get("/upload", photos.form);
 app.post("/upload", multipartMiddleware, photos.submit(app.get('images')));
 app.get("/photo/:id/download", photos.download);
+app.get('/register', users.form);
+app.post('/register', users.register);
+app.post('/checkEmail', users.checkEmail);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
