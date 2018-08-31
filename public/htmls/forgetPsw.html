@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>珍购网-密码重置</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" ">
+    <link rel="stylesheet " href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.2/css/bootstrap.min.css " integrity="sha384-y3tfxAZXuh4HwSYylfB+J125MxIs6mR5FOHamPBG064zB+AFeWH94NdvaCBm8qnd " crossorigin="anonymous ">
+    <link rel="stylesheet " href="../stylesheets/main.css ">
+</head>
+
+<body class="login ">
+    <div class="login-container ">
+      <div class="card ">
+        <header class="login-header ">
+          <h2 class="login-title text-uppercase ">Login</h2> </header>
+        <div class="login-content ">
+          <form id="login-form " action="/forgetPsw " method="GET " novalidate=" ">
+            <div class="form-group "> <label for="email ">Email</label> <input type="email " class="form-control " name="email " id="email " placeholder="Your email address " required> </div>
+            <div class="form-group "> <button type="submit " class="btn btn-block btn-success ">Reset my password</button> </div>
+            <div class="form-group text-xs-center ">
+              <p class="text-muted ">-- or --</p>
+              <p><a href="/login ">登陆</a><a href="/register ">注册</a></p>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <script src="./javascripts/jquery.min.js "></script>
+    <script src="./javascripts/appjs/forgetPsw.js "></script>
+  </body>
+</html>

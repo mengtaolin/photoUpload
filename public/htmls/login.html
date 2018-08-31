@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>珍购网-用户登陆</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.2/css/bootstrap.min.css" integrity="sha384-y3tfxAZXuh4HwSYylfB+J125MxIs6mR5FOHamPBG064zB+AFeWH94NdvaCBm8qnd" crossorigin="anonymous">
+    <link rel="stylesheet" href="../stylesheets/main.css">
+</head>
+
+<body class="login">
+    <div class="login-container">
+        <div class="card">
+            <header class="login-header">
+                <h2 class="login-title text-uppercase">Login</h2>
+            </header>
+            <div class="login-content">
+                <form id="login-form" action="/login" method="POST" novalidate="">
+                    <div class="form-group"> <label for="loginWay">账号</label>
+                        <input type="text" class="form-control" name="loginWay" id="loginWay" placeholder="邮箱/手机号码/登陆名称" required>
+                    </div>
+                    <div class="form-group"> <label for="password">密码</label>
+                        <a href="/forgetPsw" class="forgot-link pull-sm-right">忘记密码?</a>
+                        <input type="password" class="form-control" name="password" id="password" placeholder="输入密码" required>
+                    </div>
+                    <div class="form-group checkbox-remember">
+                        <div class="checkbox"> <label for="remember">
+              <input class="checkbox" id="remember" type="checkbox"> <span>Remember me</span>
+            </label> </div>
+                    </div>
+                    <div class="form-group"> <button type="submit" class="btn btn-block btn-success">Login</button> </div>
+                    <div class="form-group">
+                        <p class="text-muted text-xs-center">Do not have an account? <a href="/register">Sign Up!</a></p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="./javascripts/jquery.min.js"></script>
+    <script src="./javascripts/appjs/login.js"></script>
+</body>
+
+</html>

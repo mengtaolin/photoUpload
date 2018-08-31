@@ -7,9 +7,10 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta http-equiv="x-ua-compatible" content="ie=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-    <title><%=title%></title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.2/css/bootstrap.min.css" integrity="sha384-y3tfxAZXuh4HwSYylfB+J125MxIs6mR5FOHamPBG064zB+AFeWH94NdvaCBm8qnd"
-        crossorigin="anonymous">
+    <title>
+        <%=title%>
+    </title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.2/css/bootstrap.min.css" integrity="sha384-y3tfxAZXuh4HwSYylfB+J125MxIs6mR5FOHamPBG064zB+AFeWH94NdvaCBm8qnd" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" media="screen" href="/stylesheets/userRegister.css" />
 </head>
 
@@ -23,24 +24,33 @@
                 <form id="login-form" action="/register" method="POST" novalidate="" onsubmit="return formSubmit();">
                     <div class="form-group">
                         <label for="firstname">姓名</label>
+                        <input type="loginname" class="form-control underlined" name="loginname" id="loginname" placeholder="Enter login name" required="">
                         <div class="row">
                             <div class="col-sm-6">
-                                <input type="text" class="form-control underlined" name="firstname" id="firstname" placeholder="Enter firstname" required="">                                </div>
+                                <input type="text" class="form-control underlined" name="firstname" id="firstname" placeholder="Enter firstname" required="">
+                            </div>
                             <div class="col-sm-6">
-                                <input type="text" class="form-control underlined" name="lastname" id="lastname" placeholder="Enter lastname" required="">                                </div>
+                                <input type="text" class="form-control underlined" name="lastname" id="lastname" placeholder="Enter lastname" required="">
+                            </div>
                         </div>
                     </div>
                     <div class="form-group">
+                        <label for="phoneNum">手机号码</label>
+                        <input type="phoneNum" class="form-control underlined" name="phoneNum" id="phoneNum" placeholder="Enter phone Number" required="">
+                    </div>
+                    <div class="form-group">
                         <label for="email">邮箱</label>
-                        <input type="email" class="form-control underlined" name="email" id="email" placeholder="Enter email address" required="">                        </div>
+                        <input type="email" class="form-control underlined" name="email" id="email" placeholder="Enter email address" required="^((([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})[; ,])*(([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})))$">
+                    </div>
                     <div class="form-group">
                         <label for="password">密码</label>
                         <div class="row">
                             <div class="col-sm-6">
-                                <input type="password" class="form-control underlined" name="password" id="password" placeholder="Enter password" required="">                                </div>
+                                <input type="password" class="form-control underlined" name="password" id="password" placeholder="Enter password" required="">
+                            </div>
                             <div class="col-sm-6">
-                                <input type="password" class="form-control underlined" name="retype_password" id="retype_password" placeholder="Re-type password"
-                                    required=""> </div>
+                                <input type="password" class="form-control underlined" name="retype_password" id="retype_password" placeholder="Re-type password" required="">
+                            </div>
                         </div>
                     </div>
                     <div class="checkbox">
@@ -62,58 +72,71 @@
     <script src="/javascripts/jquery.min.js"></script>
     <script>
         var emailFormat = false;
-        $("#email").blur(function(){
+        var loginnameFormat = false;
+        $("#email").blur(function() {
             var email = $("#email").val();
             var reg = /^((([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})[; ,])*(([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})))$/;
             var result = reg.test(email);
             console.log(result);
-            if(result){
+            if (result) {
                 $.post("/checkEmail", {
-                    email:$("#email").val()
-                },
-                function(data, textStatus){
-                    if(data == 0){
-                        console.log("can register");
-                        emailFormat = true;
-                    }
-                    else{
-                        console.log("can not register");
-                    }
-                })
-            }
-            else{
+                        email: $("#email").val()
+                    },
+                    function(data, textStatus) {
+                        if (data == 0) {
+                            console.log("can register");
+                            emailFormat = true;
+                        } else {
+                            console.log("can not register");
+                        }
+                    })
+            } else {
                 console.log("can not register by RegEx check");
             }
-            
+
         });
-        
-        function formSubmit(){
+
+        $("#loginname").blur(function() {
+            var loginname = $("#loginname").val();
+            $.post("/checkLoginname", {
+                    loginname: loginname
+                },
+                function(data, textStatus) {
+                    if (data == 0) {
+                        loginnameFormat = true;
+                    } else {
+                        console.log("can not register");
+                    }
+                }
+            )
+
+        });
+
+        function formSubmit() {
             var checkResult = canRegister();
             showAlert(checkResult);
-            if(checkResult == 0){
+            if (checkResult == 0) {
                 $.post('/register', {
-                    agree:$("#agree").val(),
-                    firstname:$("#firstname").val(),
-                    lastname:$("#lastname").val(),
-                    email:$("#email").val(),
-                    password:$("#password").val()
-                }, function(data, textStatus){
-                    if(data == 0){
-                        window.location.href="http://127.0.0.1:4000/";
-                    }
-                    else{
+                    agree: $("#agree").val(),
+                    firstname: $("#firstname").val(),
+                    lastname: $("#lastname").val(),
+                    email: $("#email").val(),
+                    password: $("#password").val()
+                }, function(data, textStatus) {
+                    if (data == 0) {
+                        window.location.href = "http://127.0.0.1:4000/";
+                    } else {
                         showAlert(data);
                     }
                 })
-            }
-            else{
+            } else {
                 return false;
             }
         }
 
-        function showAlert(code){
+        function showAlert(code) {
             var tips = "";
-            switch(checkResult){
+            switch (checkResult) {
                 case 1:
                     tips = '请同意条款和协议';
                     break;
@@ -129,32 +152,31 @@
                     tips = '请输入正确的邮箱账号'
                     break;
             }
-            if(tips.length > 0){
+            if (tips.length > 0) {
                 alert(tips);
             }
         }
 
-        function canRegister(){
+        function canRegister() {
             var firstname = $("#firstname").val();
             var lastname = $("#lastname").val();
             var password = $("#password").val();
             var pswRepeat = $("#retype_password").val();
             var agree = $("#agree").val();
-            if(agree == 'on'){
+            if (agree == 'on') {
                 return 1;
             }
-            if(firstname.lenght < 2)
-            {
+            if (firstname.lenght < 2) {
                 return 2;
             }
             var regExp = new RegExp('(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[^a-zA-Z0-9]).{8,30}');
-            if(!regExp.test(password)){
+            if (!regExp.test(password)) {
                 return 4;
             }
-            if(password != pswRepeat){
+            if (password != pswRepeat) {
                 return 3;
             }
-            if(!emailFormat){
+            if (!emailFormat) {
                 return 5;
             }
             return 0;
